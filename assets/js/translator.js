@@ -93,7 +93,7 @@ if(modeEnabled('translation')) {
             persistChoices('translator');
         });
 
-        $('#markUnknownCheckbox').change(function() {
+        $('#markUnknown').change(function() {
             translate();
         });
 
@@ -441,7 +441,7 @@ function translateText() {
                 data: {
                     'langpair': curSrcLang + '|' + curDstLang,
                     'q': $('#originalText').val(),
-                    'markUnknown': ($('#markUnknownCheckbox').prop('checked')? 'yes': 'no')
+                    'markUnknown': $('#markUnknown').prop('checked') ? 'yes': 'no'
                 },
                 success: function (data) {
                     if(data.responseStatus === 200) {
@@ -651,18 +651,16 @@ function autoSelectDstLang() {
 }
 
 function synchronizeTextareaHeights() {
-    // Comment this if block if auto resize should also work on mobiles
-    // and tablet devices.
-    // the 992 value is taken from bootstrap's breakpoints
+    // Disables auto-resize on mobile devices (< 992px viewport)
     if($(window).width() < 992) {
         return;
     }
 
-    var translatedTextElem = $('#translatedText')[0];
-    var origText = $('#originalText')[0];
-
-    origText.style.overflowY = 'hidden';
-    origText.style.height = 'auto';
-    origText.style.height = origText.scrollHeight + 'px';
-    translatedTextElem.style.height = (origText.scrollHeight + 10) + 'px';
+    $('#originalText').css({
+      'overflow-y': 'hidden',
+      'height': 'auto'
+    });
+    var originalTextScrollHeight = $('#originalText')[0].scrollHeight;
+    $('#originalText').css('height', originalTextScrollHeight + 'px');
+    $('#translatedText').css('height', (originalTextScrollHeight + 10) + 'px');
 }
